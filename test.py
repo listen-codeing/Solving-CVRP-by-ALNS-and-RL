@@ -230,21 +230,21 @@ def run_multiple_seeds(actor_checkpoint_path, num_customers=10, vehicle_capacity
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Test a trained VRP ALNS model on batched instances.")
     parser.add_argument(
-        "--checkpoint", 
-        type=str, 
-        default="./checkpoints/actor_c20_v30_final.pth", 
+        "--checkpoint",
+        type=str,
+        default="./checkpoints/actor_c100_v50_final.pth",
         help="Path to the actor model checkpoint file (.pth)"
     )
     parser.add_argument(
-        "--customers", 
-        type=int, 
-        default=20, # Use a slightly larger default for testing 
+        "--customers",
+        type=int,
+        default=100, # Match the trained model
         help="Number of customers in the test instance"
     )
     parser.add_argument(
-        "--capacity", 
-        type=int, 
-        default=30, # Example capacity
+        "--capacity",
+        type=int,
+        default=50, # Match the trained model
         help="Vehicle capacity for the test instance"
     )
     parser.add_argument(
@@ -292,14 +292,26 @@ if __name__ == "__main__":
     else:
         # Run with a single seed and still show cost vs iteration plot
         history = test(
-            actor_checkpoint_path=args.checkpoint, 
-            num_customers=args.customers, 
-            vehicle_capacity=args.capacity, 
+            actor_checkpoint_path=args.checkpoint,
+            num_customers=args.customers,
+            vehicle_capacity=args.capacity,
             budget=args.budget,
             batch_size=args.batch_size,
             seed=args.seed
         )
-        
+
+        # Check if test returned valid history
+        if history is None:
+            print("\nTest failed. Please check the error messages above.")
+            print(f"Make sure the checkpoint file exists: {args.checkpoint}")
+            print(f"Available checkpoints:")
+            checkpoint_dir = os.path.dirname(args.checkpoint) or "./checkpoints"
+            if os.path.exists(checkpoint_dir):
+                for f in os.listdir(checkpoint_dir):
+                    if f.endswith('.pth'):
+                        print(f"  - {os.path.join(checkpoint_dir, f)}")
+            exit(1)
+
         # Plot cost vs iteration for single seed
         plt.figure(figsize=(10, 6))
         iterations = np.arange(len(history))
