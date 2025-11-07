@@ -9,7 +9,7 @@ from actor import actor
 from state_transition import state_transition
 # Use data_generator to create a loader, even for a single instance
 from graph_data import data_generator 
-from train import move_graph_to_device # Use the device moving utility
+from train_reinforce import move_graph_to_device # Use the device moving utility
 
 def plot_routes(ax, vrp_data, title):
     """Plots the VRP routes on a given matplotlib axis."""
