@@ -1,0 +1,17 @@
+# AGV-ALNS-RL Requirements
+
+# Core dependencies
+torch>=1.10.0
+torch-geometric>=2.0.0
+numpy>=1.21.0
+tqdm>=4.62.0
+
+# PyG dependencies (if not auto-installed)
+torch-scatter
+torch-sparse
+torch-cluster
+torch-spline-conv
+
+# Development dependencies (optional)
+pytest>=6.2.0
+matplotlib>=3.4.0
